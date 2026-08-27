@@ -3,10 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
 import { configureApp } from '../src/bootstrap';
 
-const serverless = require('serverless-http');
-
 let cachedApp: any;
-let cachedHandler: any;
 
 async function bootstrap() {
   console.log('[Vercel] Bootstrapping NestJS app...');
@@ -34,12 +31,26 @@ export default async (req: any, res: any) => {
     if (!cachedApp) {
       cachedApp = await bootstrap();
     }
-    if (!cachedHandler) {
-      const httpAdapter = cachedApp.getHttpAdapter();
-      const instance = httpAdapter.getInstance();
-      cachedHandler = serverless(instance);
-    }
-    return cachedHandler(req, res);
+
+    const instance = cachedApp.getHttpAdapter().getInstance();
+    console.log('[Vercel] Passing request to Express app');
+
+    // Add a safety timeout so we can see if Express never responds
+    const timer = setTimeout(() => {
+      console.error('[Vercel] Express did not respond within 8s');
+      if (!res.headersSent) {
+        res.statusCode = 504;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ error: 'Express handler timeout' }));
+      }
+    }, 8000);
+
+    res.on('finish', () => {
+      clearTimeout(timer);
+      console.log('[Vercel] Response finished:', res.statusCode);
+    });
+
+    instance(req, res);
   } catch (error) {
     console.error('[Vercel] Handler error:', error);
     res.statusCode = 500;
