@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { existsSync } from 'fs';
 import { ChatModule } from './modules/chat/chat.module';
 import { EmailModule } from './modules/email/email.module';
 import { HealthModule } from './modules/health/health.module';
@@ -21,7 +22,11 @@ import { SettingsModule } from './modules/settings/settings.module';
       },
     ]),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'frontend', 'dist'),
+      // Vercel/serverless: files are at /var/task/frontend/dist
+      // Local: files are at <project-root>/frontend/dist
+      rootPath: existsSync(join(process.cwd(), 'frontend', 'dist'))
+        ? join(process.cwd(), 'frontend', 'dist')
+        : join(__dirname, '..', 'frontend', 'dist'),
       serveRoot: '/',
     }),
     HealthModule,

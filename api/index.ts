@@ -19,9 +19,15 @@ async function bootstrap() {
 }
 
 export default async (req: any, res: any) => {
-  if (!cachedHandler) {
-    const app = await bootstrap();
-    cachedHandler = serverless(app);
+  try {
+    if (!cachedHandler) {
+      const app = await bootstrap();
+      cachedHandler = serverless(app);
+    }
+    return cachedHandler(req, res);
+  } catch (error) {
+    console.error('Vercel handler error:', error);
+    res.statusCode = 500;
+    res.end(JSON.stringify({ statusCode: 500, message: 'Internal server error' }));
   }
-  return cachedHandler(req, res);
 };

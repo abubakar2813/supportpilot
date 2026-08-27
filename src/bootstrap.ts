@@ -12,7 +12,10 @@ export async function configureApp(app: INestApplication): Promise<INestApplicat
 
   // Security & performance middleware
   app.use(helmet());
-  app.use(compression());
+  // Compression can hang in serverless environments (e.g. Vercel), so skip it there.
+  if (!process.env.VERCEL) {
+    app.use(compression());
+  }
   app.enableCors();
 
   // Global validation
