@@ -1,0 +1,154 @@
+{
+  "project": {
+    "name": "supportpilot",
+    "description": "AI-powered customer support agent for small businesses",
+    "version": "1.0.0",
+    "defaultPort": 3000,
+    "nodeVersion": ">=18.0.0"
+  },
+  "scripts": {
+    "install": "npm install",
+    "installAll": "npm install && cd frontend && npm install && cd ..",
+    "build": "npm run build",
+    "buildAll": "npm run build:all",
+    "buildVercel": "npm run build:vercel",
+    "startDev": "npm run start:dev",
+    "startProd": "npm run start:prod",
+    "clean": "npm run clean",
+    "test": "npm test"
+  },
+  "deployments": {
+    "local": {
+      "installCommand": "npm install && cd frontend && npm install && cd ..",
+      "buildCommand": "npm run build:all",
+      "startCommand": "npm run start:prod",
+      "port": 3000,
+      "envFile": ".env"
+    },
+    "render": {
+      "serviceName": "supportpilot",
+      "runtime": "node",
+      "plan": "free",
+      "installCommand": "npm install && cd frontend && npm install && cd ..",
+      "buildCommand": "npm install && cd frontend && npm install && cd .. && npm run build:all",
+      "startCommand": "npm run start:prod",
+      "port": 3000,
+      "healthCheckPath": "/health",
+      "envVars": [
+        "NODE_ENV=production",
+        "PORT=3000",
+        "GEMINI_API_KEY",
+        "GEMINI_MODEL=gemini-3.6-flash",
+        "RESEND_API_KEY",
+        "RESEND_FROM_EMAIL=onboarding@resend.dev",
+        "BUSINESS_NAME=SupportPilot",
+        "BUSINESS_WEBSITE",
+        "SUPPORT_EMAIL",
+        "SYSTEM_PROMPT",
+        "SENTRY_DSN"
+      ],
+      "configFile": "render.yaml"
+    },
+    "vercel": {
+      "serviceName": "supportpilot",
+      "frameworkPreset": "Other",
+      "installCommand": "npm install",
+      "buildCommand": "npm run build:vercel",
+      "outputDirectory": "",
+      "port": 3000,
+      "envVars": [
+        "NODE_ENV=production",
+        "GEMINI_API_KEY",
+        "GEMINI_MODEL=gemini-3.6-flash",
+        "RESEND_API_KEY",
+        "RESEND_FROM_EMAIL=onboarding@resend.dev",
+        "BUSINESS_NAME=SupportPilot",
+        "BUSINESS_WEBSITE",
+        "SUPPORT_EMAIL",
+        "SYSTEM_PROMPT",
+        "SENTRY_DSN"
+      ],
+      "configFile": "vercel.json",
+      "entryPoint": "api/index.ts"
+    },
+    "koyeb": {
+      "serviceName": "supportpilot",
+      "builder": "native-nodejs",
+      "installCommand": "npm install && cd frontend && npm install && cd ..",
+      "buildCommand": "npm install && cd frontend && npm install && cd .. && npm run build:all",
+      "startCommand": "npm run start:prod",
+      "port": 3000,
+      "healthCheckPath": "/health",
+      "envVars": [
+        "NODE_ENV=production",
+        "PORT=3000",
+        "GEMINI_API_KEY",
+        "GEMINI_MODEL=gemini-3.6-flash",
+        "RESEND_API_KEY",
+        "RESEND_FROM_EMAIL=onboarding@resend.dev",
+        "BUSINESS_NAME=SupportPilot",
+        "BUSINESS_WEBSITE",
+        "SUPPORT_EMAIL",
+        "SYSTEM_PROMPT",
+        "SENTRY_DSN"
+      ],
+      "configFile": "koyeb.yaml"
+    },
+    "northflank": {
+      "serviceName": "supportpilot",
+      "buildType": "buildpack",
+      "builder": "nodejs",
+      "installCommand": "npm install && cd frontend && npm install && cd ..",
+      "buildCommand": "npm install && cd frontend && npm install && cd .. && npm run build:all",
+      "startCommand": "npm run start:prod",
+      "port": 3000,
+      "healthCheckPath": "/health",
+      "envVars": [
+        "NODE_ENV=production",
+        "PORT=3000",
+        "GEMINI_API_KEY",
+        "GEMINI_MODEL=gemini-3.6-flash",
+        "RESEND_API_KEY",
+        "RESEND_FROM_EMAIL=onboarding@resend.dev",
+        "BUSINESS_NAME=SupportPilot",
+        "BUSINESS_WEBSITE",
+        "SUPPORT_EMAIL",
+        "SYSTEM_PROMPT",
+        "SENTRY_DSN"
+      ],
+      "configFile": "northflank.yaml"
+    },
+    "docker": {
+      "imageName": "supportpilot",
+      "dockerfile": "Dockerfile",
+      "port": 3000,
+      "buildCommand": "docker build -t supportpilot .",
+      "runCommand": "docker run -p 3000:3000 --env-file .env supportpilot",
+      "envFile": ".env"
+    }
+  },
+  "environmentVariables": {
+    "required": [
+      "GEMINI_API_KEY",
+      "RESEND_API_KEY",
+      "SENTRY_DSN"
+    ],
+    "optional": [
+      "PORT",
+      "NODE_ENV",
+      "GEMINI_MODEL",
+      "RESEND_FROM_EMAIL",
+      "BUSINESS_NAME",
+      "BUSINESS_WEBSITE",
+      "SUPPORT_EMAIL",
+      "SYSTEM_PROMPT"
+    ],
+    "defaults": {
+      "PORT": "3000",
+      "NODE_ENV": "development",
+      "GEMINI_MODEL": "gemini-3.6-flash",
+      "RESEND_FROM_EMAIL": "onboarding@resend.dev",
+      "BUSINESS_NAME": "SupportPilot"
+    }
+  }
+}

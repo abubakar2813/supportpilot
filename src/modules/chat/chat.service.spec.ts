@@ -14,7 +14,7 @@ describe('ChatService', () => {
           provide: ConfigService,
           useValue: {
             get: jest.fn((key: string) => {
-              if (key === 'GEMINI_MODEL') return 'gemini-1.5-flash';
+              if (key === 'GEMINI_MODEL') return 'gemini-3.6-flash';
               return null;
             }),
           },
@@ -43,7 +43,7 @@ describe('ChatService', () => {
   it('should return fallback response when API key is missing', async () => {
     const result = await service.sendMessage({ message: 'Hello' });
     expect(result.response).toContain('AI service is not configured');
-    expect(result.model).toBe('gemini-1.5-flash');
+    expect(result.model).toBe('gemini-3.6-flash');
   });
 
   it('should list available models', () => {

@@ -21,11 +21,13 @@ SupportPilot answers website visitors instantly, captures leads, and emails conv
 8. [Deployment on Render](#8-deployment-on-render)
 9. [Deployment on Vercel](#9-deployment-on-vercel)
 10. [Deployment on Koyeb](#10-deployment-on-koyeb)
-11. [Deployment with Docker](#11-deployment-with-docker)
-12. [Troubleshooting](#12-troubleshooting)
-13. [Demo Recording Checklist](#13-demo-recording-checklist)
-14. [LinkedIn Post Template](#14-linkedin-post-template)
-15. [Free Tier Limits](#15-free-tier-limits)
+11. [Deployment on Northflank](#11-deployment-on-northflank)
+12. [Deployment Configuration Reference](#12-deployment-configuration-reference)
+13. [Deployment with Docker](#13-deployment-with-docker)
+14. [Troubleshooting](#14-troubleshooting)
+15. [Demo Recording Checklist](#15-demo-recording-checklist)
+16. [LinkedIn Post Template](#16-linkedin-post-template)
+17. [Free Tier Limits](#17-free-tier-limits)
 
 ---
 
@@ -87,6 +89,8 @@ supportpilot/
 ├── render.yaml                   # Render deployment config
 ├── vercel.json                   # Vercel deployment config
 ├── koyeb.yaml                    # Koyeb deployment config
+├── northflank.yaml               # Northflank deployment config
+├── deploy-config.json            # Build args for all platforms
 ├── api/                          # Vercel serverless entry
 │   └── index.ts
 ├── README.md                     # Short README
@@ -546,7 +550,62 @@ https://supportpilot-xxx.koyeb.app/api/docs
 
 ---
 
-## 11. Deployment with Docker
+## 11. Deployment on Northflank (Free Tier — No Card)
+
+Northflank is a reliable container platform with a generous free tier and usually no credit card required.
+
+### Why Northflank?
+
+- Free tier available without a credit card
+- Native Node.js buildpack support
+- Automatic deploys from GitHub
+- Health checks and custom domains
+- Longer request timeouts than Vercel
+
+### Steps
+
+1. Push this repo to GitHub
+2. Go to https://www.northflank.com and sign up with GitHub
+3. Click **Create Project**
+4. Choose **Create Service**
+5. Select **Build from GitHub repository**
+6. Select your repository
+7. Use these settings:
+
+| Setting | Value |
+|---------|-------|
+| Name | `supportpilot` |
+| Build Type | Buildpack (Node.js) |
+| Build Command | `npm install && cd frontend && npm install && cd .. && npm run build:all` |
+| Start Command | `npm run start:prod` |
+| Port | `3000` |
+
+8. Add environment variables from `.env.example` in **Variables**
+9. Click **Create Service**
+
+Your app will be live at:
+
+```
+https://supportpilot-xxx.northflank.app
+```
+
+Swagger docs:
+
+```
+https://supportpilot-xxx.northflank.app/api/docs
+```
+
+> The `northflank.yaml` file in this repo can be used as a deployment template.
+
+---
+
+## 12. Deployment Configuration Reference
+
+All build commands, environment variables, and platform-specific settings are centralized in `deploy-config.json`. Use this file as a quick reference when configuring Render, Vercel, Koyeb, Northflank, or Docker deployments.
+
+---
+
+## 13. Deployment with Docker
 
 ### Build the image
 
@@ -577,7 +636,7 @@ Open http://localhost:3000
 
 ---
 
-## 12. Troubleshooting
+## 14. Troubleshooting
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
@@ -593,7 +652,7 @@ Open http://localhost:3000
 
 ---
 
-## 13. Demo Recording Checklist
+## 15. Demo Recording Checklist
 
 Your demo video should clearly show:
 
@@ -609,7 +668,7 @@ Your demo video should clearly show:
 
 ---
 
-## 14. LinkedIn Post Template
+## 16. LinkedIn Post Template
 
 You can use this as a starting point for your LinkedIn post:
 
@@ -641,7 +700,7 @@ What I learned:
 
 ---
 
-## 15. Free Tier Limits
+## 17. Free Tier Limits
 
 | Service | Free Tier | Limit |
 |---------|-----------|-------|
@@ -651,6 +710,7 @@ What I learned:
 | Render | Web Service Free | 512 MB RAM, sleeps after inactivity |
 | Vercel | Hobby Plan | Serverless functions, 10s timeout |
 | Koyeb | Free Tier | 1 app, native Node.js, no card |
+| Northflank | Free Tier | 1 service, buildpack or Docker |
 
 ### Important note about Resend
 

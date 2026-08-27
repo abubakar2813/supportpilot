@@ -30,7 +30,7 @@ export class ChatService {
     this.genAI = new GoogleGenerativeAI(apiKey || '');
     this.modelName = this.configService.get<string>(
       'GEMINI_MODEL',
-      'gemini-1.5-flash-latest',
+      'gemini-3.6-flash',
     );
     console.log(`Gemini model configured: ${this.modelName}`);
   }
@@ -87,10 +87,11 @@ export class ChatService {
     return {
       provider: 'Google Gemini',
       models: [
-        { id: 'gemini-1.5-flash-latest', name: 'Gemini 1.5 Flash (fast & cheap)' },
-        { id: 'gemini-1.5-pro-latest', name: 'Gemini 1.5 Pro (advanced reasoning)' },
-        { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash (stable)' },
-        { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro (stable)' },
+        { id: 'gemini-3.6-flash', name: 'Gemini 3.6 Flash (recommended)' },
+        { id: 'gemini-3.5-flash', name: 'Gemini 3.5 Flash' },
+        { id: 'gemini-3.5-flash-lite', name: 'Gemini 3.5 Flash Lite' },
+        { id: 'gemini-flash-latest', name: 'Gemini Flash Latest' },
+        { id: 'gemini-pro-latest', name: 'Gemini Pro Latest' },
       ],
       default: this.modelName,
     };

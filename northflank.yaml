@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: supportpilot
+spec:
+  build:
+    type: buildpack
+    command: npm install && cd frontend && npm install && cd .. && npm run build:all
+  runtime:
+    command: npm run start:prod
+    ports:
+      - port: 3000
+        protocol: http
+    healthCheck:
+      path: /health
+      port: 3000
+      initialDelay: 10
+      interval: 30
+      timeout: 5
+      failureThreshold: 3
+  env:
+    - name: NODE_ENV
+      value: production
+    - name: PORT
+      value: "3000"
+    - name: GEMINI_MODEL
+      value: gemini-3.6-flash
+    - name: RESEND_FROM_EMAIL
+      value: onboarding@resend.dev
+    # Add these as secrets in the Northflank dashboard:
+    # - GEMINI_API_KEY
+    # - RESEND_API_KEY
+    # - SENTRY_DSN
+    # - BUSINESS_NAME
+    # - BUSINESS_WEBSITE
+    # - SUPPORT_EMAIL
+    # - SYSTEM_PROMPT

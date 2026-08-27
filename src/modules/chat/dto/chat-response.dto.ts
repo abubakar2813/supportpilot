@@ -7,7 +7,7 @@ export class ChatResponseDto {
   })
   response: string;
 
-  @ApiProperty({ example: 'gemini-1.5-flash', description: 'Model used.' })
+  @ApiProperty({ example: 'gemini-3.6-flash', description: 'Model used.' })
   model: string;
 
   @ApiProperty({ example: '2026-08-22T17:12:32.169Z', description: 'Timestamp of the response.' })

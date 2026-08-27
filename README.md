@@ -19,7 +19,7 @@ Built with **NestJS**, **React + Vite**, **Google Gemini**, **Resend**, **Swagge
 - 📚 **Swagger API documentation**
 - 🐛 **Sentry error tracking & monitoring**
 - 🛡️ **Security:** Helmet, CORS, compression, rate limiting, input validation
-- 🐳 **Docker, Render, Vercel & Koyeb deployment ready**
+- 🐳 **Docker, Render, Vercel, Koyeb & Northflank deployment ready**
 
 ---
 
@@ -29,12 +29,12 @@ Built with **NestJS**, **React + Vite**, **Google Gemini**, **Resend**, **Swagge
 |-------|------------|
 | Frontend | React + Vite |
 | Backend | NestJS |
-| AI Model | Google Gemini (`gemini-1.5-flash`) |
+| AI Model | Google Gemini (`gemini-3.6-flash`) |
 | Email | Resend |
 | API Docs | Swagger / OpenAPI |
 | Monitoring | Sentry |
 | Language | TypeScript / JavaScript |
-| Deployment | Render / Vercel / Koyeb (free tier) |
+| Deployment | Render / Vercel / Koyeb / Northflank (free tier) |
 
 ---
 
@@ -49,7 +49,7 @@ Free accounts on:
 - [Google AI Studio](https://aistudio.google.com/app/apikey) (Gemini API key)
 - [Resend](https://resend.com/) (API key)
 - [Sentry](https://sentry.io/) (DSN)
-- [Render](https://render.com/) or [Vercel](https://vercel.com/) or [Koyeb](https://www.koyeb.com/) (deployment)
+- [Render](https://render.com/), [Vercel](https://vercel.com/), [Koyeb](https://www.koyeb.com/), or [Northflank](https://www.northflank.com/) (deployment)
 - [GitHub](https://github.com/) (repository)
 
 ---
@@ -217,6 +217,8 @@ Open http://localhost:3000/api/docs and try all endpoints.
 ├── render.yaml
 ├── vercel.json
 ├── koyeb.yaml
+├── northflank.yaml
+├── deploy-config.json            # Build args for all platforms
 ├── api/
 │   └── index.ts                  # Vercel serverless entry
 ├── README.md
@@ -327,6 +329,45 @@ Your app will be live at `https://supportpilot-xxx.koyeb.app`.
 Swagger docs: `https://supportpilot-xxx.koyeb.app/api/docs`
 
 > Koyeb free tier includes 1 app with automatic deploys, health checks, and a custom domain.
+
+---
+
+## 🔷 Deploy on Northflank (Free Tier — No Card)
+
+Northflank is another reliable free alternative that supports native Node.js builds.
+
+### Steps
+
+1. Push this repo to GitHub
+2. Go to https://www.northflank.com and sign up with GitHub
+3. Click **Create Project**
+4. Choose **Create Service**
+5. Select **Build from GitHub repository**
+6. Select your repository
+7. Use these settings:
+
+| Setting | Value |
+|---------|-------|
+| Name | `supportpilot` |
+| Build Type | Buildpack (Node.js) |
+| Build Command | `npm install && cd frontend && npm install && cd .. && npm run build:all` |
+| Start Command | `npm run start:prod` |
+| Port | `3000` |
+
+8. Add environment variables from `.env.example` in **Variables**
+9. Click **Create Service**
+
+Your app will be live at `https://supportpilot-xxx.northflank.app`.
+
+Swagger docs: `https://supportpilot-xxx.northflank.app/api/docs`
+
+> The `northflank.yaml` file in this repo can be used as a deployment template.
+
+---
+
+## 📋 Deployment Configuration Reference
+
+All build commands, environment variables, and platform settings are centralized in `deploy-config.json`. Use it as a quick reference when configuring Render, Vercel, Koyeb, Northflank, or Docker.
 
 ---
 
