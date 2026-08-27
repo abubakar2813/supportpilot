@@ -1,3 +1,15 @@
 {
-  "buildCommand": "npm run build:vercel"
+  "buildCommand": "npm run build:vercel",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index.ts" },
+    { "source": "/health/:path*", "destination": "/api/index.ts" },
+    { "source": "/settings", "destination": "/api/index.ts" },
+    { "source": "/chat/:path*", "destination": "/api/index.ts" },
+    { "source": "/email/:path*", "destination": "/api/index.ts" }
+  ],
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "node_modules/swagger-ui-dist/**"
+    }
+  }
 }
