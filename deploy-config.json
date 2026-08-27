@@ -54,7 +54,7 @@
       "frameworkPreset": "Other",
       "installCommand": "npm install",
       "buildCommand": "npm run build:vercel",
-      "outputDirectory": "",
+      "outputDirectory": "frontend/dist",
       "port": 3000,
       "envVars": [
         "NODE_ENV=production",
