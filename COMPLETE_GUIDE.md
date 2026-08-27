@@ -19,11 +19,12 @@ SupportPilot answers website visitors instantly, captures leads, and emails conv
 6. [Running Locally](#6-running-locally)
 7. [Testing Everything](#7-testing-everything)
 8. [Deployment on Render](#8-deployment-on-render)
-9. [Deployment with Docker](#9-deployment-with-docker)
-10. [Troubleshooting](#10-troubleshooting)
-11. [Demo Recording Checklist](#11-demo-recording-checklist)
-12. [LinkedIn Post Template](#12-linkedin-post-template)
-13. [Free Tier Limits](#13-free-tier-limits)
+9. [Deployment on Vercel](#9-deployment-on-vercel)
+10. [Deployment with Docker](#10-deployment-with-docker)
+11. [Troubleshooting](#11-troubleshooting)
+12. [Demo Recording Checklist](#12-demo-recording-checklist)
+13. [LinkedIn Post Template](#13-linkedin-post-template)
+14. [Free Tier Limits](#14-free-tier-limits)
 
 ---
 
@@ -83,6 +84,9 @@ supportpilot/
 ├── .env.example                  # Environment variables template
 ├── Dockerfile                    # Docker deployment
 ├── render.yaml                   # Render deployment config
+├── vercel.json                   # Vercel deployment config
+├── api/                          # Vercel serverless entry
+│   └── index.ts
 ├── README.md                     # Short README
 ├── COMPLETE_GUIDE.md             # This file
 ├── package.json                  # Backend dependencies
@@ -187,7 +191,7 @@ PORT=3000
 NODE_ENV=development
 
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-3.6-flash
 
 RESEND_API_KEY=your_resend_api_key_here
 RESEND_FROM_EMAIL=onboarding@resend.dev
@@ -410,7 +414,7 @@ git push -u origin main
 NODE_ENV=production
 PORT=3000
 GEMINI_API_KEY=your_gemini_api_key
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-3.6-flash
 RESEND_API_KEY=your_resend_api_key
 RESEND_FROM_EMAIL=onboarding@resend.dev
 BUSINESS_NAME=SupportPilot
@@ -438,7 +442,61 @@ https://supportpilot-xxx.onrender.com/api/docs
 
 ---
 
-## 9. Deployment with Docker
+## 9. Deployment on Vercel (Free Tier)
+
+If Render asks for a debit/credit card, Vercel is a good free alternative.
+
+### Limitations
+
+- Serverless functions have a **10-second timeout** on the free Hobby plan
+- Cold starts can add 1–3 seconds to the first request
+- Best for demos and low-traffic sites
+
+### Steps
+
+1. Push this repo to GitHub
+2. Go to https://vercel.com and sign up with GitHub
+3. Click **Add New Project**
+4. Import your GitHub repository
+5. Use these settings:
+
+| Setting | Value |
+|---------|-------|
+| Framework Preset | Other |
+| Install Command | `npm install` |
+| Build Command | `npm run build:vercel` |
+| Output Directory | Leave empty |
+
+6. Add environment variables:
+
+```
+NODE_ENV=production
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-3.6-flash
+RESEND_API_KEY=your_resend_api_key
+RESEND_FROM_EMAIL=onboarding@resend.dev
+BUSINESS_NAME=SupportPilot
+BUSINESS_WEBSITE=https://supportpilot.example.com
+SUPPORT_EMAIL=support@example.com
+SYSTEM_PROMPT=your_custom_prompt
+SENTRY_DSN=your_sentry_dsn
+```
+
+7. Click **Deploy**
+
+Your app will be live at:
+
+```
+https://supportpilot-xxx.vercel.app
+```
+
+The `api/index.ts` serverless function handles all API routes and serves the React frontend from `frontend/dist`.
+
+> Use **Install Command:** `npm install` and **Build Command:** `npm run build:vercel`.
+
+---
+
+## 10. Deployment with Docker
 
 ### Build the image
 
@@ -469,7 +527,7 @@ Open http://localhost:3000
 
 ---
 
-## 10. Troubleshooting
+## 11. Troubleshooting
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
@@ -485,7 +543,7 @@ Open http://localhost:3000
 
 ---
 
-## 11. Demo Recording Checklist
+## 12. Demo Recording Checklist
 
 Your demo video should clearly show:
 
@@ -501,7 +559,7 @@ Your demo video should clearly show:
 
 ---
 
-## 12. LinkedIn Post Template
+## 13. LinkedIn Post Template
 
 You can use this as a starting point for your LinkedIn post:
 
@@ -533,7 +591,7 @@ What I learned:
 
 ---
 
-## 13. Free Tier Limits
+## 14. Free Tier Limits
 
 | Service | Free Tier | Limit |
 |---------|-----------|-------|
@@ -541,6 +599,7 @@ What I learned:
 | Resend | Free plan | 100 emails/day, verified recipients only |
 | Sentry | Developer plan | 5,000 errors/month |
 | Render | Web Service Free | 512 MB RAM, sleeps after inactivity |
+| Vercel | Hobby Plan | Serverless functions, 10s timeout |
 
 ### Important note about Resend
 

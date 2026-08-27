@@ -19,7 +19,7 @@ Built with **NestJS**, **React + Vite**, **Google Gemini**, **Resend**, **Swagge
 - 📚 **Swagger API documentation**
 - 🐛 **Sentry error tracking & monitoring**
 - 🛡️ **Security:** Helmet, CORS, compression, rate limiting, input validation
-- 🐳 **Docker & Render deployment ready**
+- 🐳 **Docker, Render & Vercel deployment ready**
 
 ---
 
@@ -34,7 +34,7 @@ Built with **NestJS**, **React + Vite**, **Google Gemini**, **Resend**, **Swagge
 | API Docs | Swagger / OpenAPI |
 | Monitoring | Sentry |
 | Language | TypeScript / JavaScript |
-| Deployment | Render (free tier) |
+| Deployment | Render / Vercel (free tier) |
 
 ---
 
@@ -83,7 +83,7 @@ PORT=3000
 NODE_ENV=development
 
 GEMINI_API_KEY=your_gemini_api_key
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-3.6-flash
 
 RESEND_API_KEY=your_resend_api_key
 RESEND_FROM_EMAIL=onboarding@resend.dev
@@ -215,6 +215,9 @@ Open http://localhost:3000/api/docs and try all endpoints.
 ├── .env.example
 ├── Dockerfile
 ├── render.yaml
+├── vercel.json
+├── api/
+│   └── index.ts                  # Vercel serverless entry
 ├── README.md
 └── COMPLETE_GUIDE.md
 ```
@@ -255,6 +258,42 @@ Open http://localhost:3000
 Your app will be live at `https://supportpilot-xxx.onrender.com`.
 
 Swagger docs: `https://supportpilot-xxx.onrender.com/api/docs`
+
+---
+
+## ▲ Deploy on Vercel (Free Tier)
+
+If Render asks for a card, Vercel is a good free alternative.
+
+### Limitations
+
+- Serverless functions have a **10-second timeout** on the free Hobby plan
+- Cold starts can add 1–3 seconds to the first request
+- Best for demos and low traffic
+
+### Steps
+
+1. Push this repo to GitHub
+2. Go to https://vercel.com and sign up with GitHub
+3. Click **Add New Project**
+4. Import your GitHub repository
+5. Use these settings:
+
+| Setting | Value |
+|---------|-------|
+| Framework Preset | Other |
+| Install Command | `npm install` |
+| Build Command | `npm run build:vercel` |
+| Output Directory | Leave empty |
+
+6. Add environment variables from `.env.example` in **Settings → Environment Variables**
+7. Click **Deploy**
+
+Your app will be live at `https://supportpilot-xxx.vercel.app`.
+
+> The `api/index.ts` file handles all API routes and serves the React frontend from `frontend/dist`.
+> 
+> Use **Install Command:** `npm install` and **Build Command:** `npm run build:vercel`.
 
 ---
 
