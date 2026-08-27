@@ -1,11 +1,11 @@
-import { Catch, ArgumentsHost, HttpException } from '@nestjs/common';
-import { BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
+import { Catch, ArgumentsHost, HttpException, HttpServer } from '@nestjs/common';
+import { BaseExceptionFilter } from '@nestjs/core';
 import * as Sentry from '@sentry/node';
 
 @Catch()
 export class SentryExceptionFilter extends BaseExceptionFilter {
-  constructor(adapterHost: HttpAdapterHost) {
-    super(adapterHost.httpAdapter);
+  constructor(applicationRef?: HttpServer) {
+    super(applicationRef);
   }
 
   catch(exception: unknown, host: ArgumentsHost) {
@@ -15,6 +15,20 @@ export class SentryExceptionFilter extends BaseExceptionFilter {
       (exception instanceof HttpException && exception.getStatus() >= 500)
     ) {
       Sentry.captureException(exception);
+    }
+
+    // If BaseExceptionFilter was not given an adapter (e.g. missing SENTRY_DSN
+    // or registration race), let the default exception handler take over.
+    if (!this.applicationRef) {
+      const ctx = host.switchToHttp();
+      const response = ctx.getResponse();
+      if (response && typeof response.status === 'function') {
+        return response.status(500).json({
+          statusCode: 500,
+          message: 'Internal server error',
+        });
+      }
+      return;
     }
 
     super.catch(exception, host);

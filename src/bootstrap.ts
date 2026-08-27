@@ -32,8 +32,8 @@ export async function configureApp(app: INestApplication): Promise<INestApplicat
       environment: configService.get<string>('NODE_ENV', 'development'),
       tracesSampleRate: 1.0,
     });
-    const adapterHost = app.get(HttpAdapterHost);
-    app.useGlobalFilters(new SentryExceptionFilter(adapterHost));
+    const { httpAdapter } = app.get(HttpAdapterHost);
+    app.useGlobalFilters(new SentryExceptionFilter(httpAdapter));
   }
 
   // Swagger docs
