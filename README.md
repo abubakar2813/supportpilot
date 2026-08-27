@@ -19,7 +19,7 @@ Built with **NestJS**, **React + Vite**, **Google Gemini**, **Resend**, **Swagge
 - 📚 **Swagger API documentation**
 - 🐛 **Sentry error tracking & monitoring**
 - 🛡️ **Security:** Helmet, CORS, compression, rate limiting, input validation
-- 🐳 **Docker, Render & Vercel deployment ready**
+- 🐳 **Docker, Render, Vercel & Koyeb deployment ready**
 
 ---
 
@@ -34,7 +34,7 @@ Built with **NestJS**, **React + Vite**, **Google Gemini**, **Resend**, **Swagge
 | API Docs | Swagger / OpenAPI |
 | Monitoring | Sentry |
 | Language | TypeScript / JavaScript |
-| Deployment | Render / Vercel (free tier) |
+| Deployment | Render / Vercel / Koyeb (free tier) |
 
 ---
 
@@ -49,7 +49,7 @@ Free accounts on:
 - [Google AI Studio](https://aistudio.google.com/app/apikey) (Gemini API key)
 - [Resend](https://resend.com/) (API key)
 - [Sentry](https://sentry.io/) (DSN)
-- [Render](https://render.com/) (deployment)
+- [Render](https://render.com/) or [Vercel](https://vercel.com/) or [Koyeb](https://www.koyeb.com/) (deployment)
 - [GitHub](https://github.com/) (repository)
 
 ---
@@ -216,6 +216,7 @@ Open http://localhost:3000/api/docs and try all endpoints.
 ├── Dockerfile
 ├── render.yaml
 ├── vercel.json
+├── koyeb.yaml
 ├── api/
 │   └── index.ts                  # Vercel serverless entry
 ├── README.md
@@ -294,6 +295,38 @@ Your app will be live at `https://supportpilot-xxx.vercel.app`.
 > The `api/index.ts` file handles all API routes and serves the React frontend from `frontend/dist`.
 > 
 > Use **Install Command:** `npm install` and **Build Command:** `npm run build:vercel`.
+
+---
+
+## 🟢 Deploy on Koyeb (Free Tier — No Card)
+
+Koyeb is the best free alternative if Render asks for a card and Vercel is too limited.
+
+### Steps
+
+1. Push this repo to GitHub
+2. Go to https://www.koyeb.com and sign up with GitHub
+3. Click **Create App**
+4. Choose **GitHub** as the deployment method
+5. Select your repository
+6. Use these settings:
+
+| Setting | Value |
+|---------|-------|
+| Name | `supportpilot` |
+| Builder | Native Node.js (no Docker needed) |
+| Build Command | `npm install && cd frontend && npm install && cd .. && npm run build:all` |
+| Run Command | `npm run start:prod` |
+| Port | `3000` |
+
+7. Add environment variables from `.env.example` in **Variables**
+8. Click **Deploy**
+
+Your app will be live at `https://supportpilot-xxx.koyeb.app`.
+
+Swagger docs: `https://supportpilot-xxx.koyeb.app/api/docs`
+
+> Koyeb free tier includes 1 app with automatic deploys, health checks, and a custom domain.
 
 ---
 

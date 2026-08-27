@@ -10,6 +10,7 @@
     "build:frontend": "cd frontend && npm install && npm run build",
     "build:all": "npm run build:frontend && npm run build",
     "build:vercel": "cd frontend && npm install && npm run build && cd .. && npm run build",
+    "clean": "rm -rf dist frontend/dist *.tsbuildinfo",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

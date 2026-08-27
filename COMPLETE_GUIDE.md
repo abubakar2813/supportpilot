@@ -20,11 +20,12 @@ SupportPilot answers website visitors instantly, captures leads, and emails conv
 7. [Testing Everything](#7-testing-everything)
 8. [Deployment on Render](#8-deployment-on-render)
 9. [Deployment on Vercel](#9-deployment-on-vercel)
-10. [Deployment with Docker](#10-deployment-with-docker)
-11. [Troubleshooting](#11-troubleshooting)
-12. [Demo Recording Checklist](#12-demo-recording-checklist)
-13. [LinkedIn Post Template](#13-linkedin-post-template)
-14. [Free Tier Limits](#14-free-tier-limits)
+10. [Deployment on Koyeb](#10-deployment-on-koyeb)
+11. [Deployment with Docker](#11-deployment-with-docker)
+12. [Troubleshooting](#12-troubleshooting)
+13. [Demo Recording Checklist](#13-demo-recording-checklist)
+14. [LinkedIn Post Template](#14-linkedin-post-template)
+15. [Free Tier Limits](#15-free-tier-limits)
 
 ---
 
@@ -85,6 +86,7 @@ supportpilot/
 ├── Dockerfile                    # Docker deployment
 ├── render.yaml                   # Render deployment config
 ├── vercel.json                   # Vercel deployment config
+├── koyeb.yaml                    # Koyeb deployment config
 ├── api/                          # Vercel serverless entry
 │   └── index.ts
 ├── README.md                     # Short README
@@ -496,7 +498,55 @@ The `api/index.ts` serverless function handles all API routes and serves the Rea
 
 ---
 
-## 10. Deployment with Docker
+## 10. Deployment on Koyeb (Free Tier — No Card)
+
+Koyeb is the best free alternative if Render asks for a card and Vercel's serverless limits are a problem.
+
+### Why Koyeb?
+
+- No credit card required for the free tier
+- Native Node.js support (no Docker needed)
+- Automatic deploys from GitHub
+- Health checks and custom domains included
+- Longer request timeout than Vercel Hobby
+
+### Steps
+
+1. Push this repo to GitHub
+2. Go to https://www.koyeb.com and sign up with GitHub
+3. Click **Create App**
+4. Choose **GitHub** as the deployment method
+5. Select your repository
+6. Use these settings:
+
+| Setting | Value |
+|---------|-------|
+| Name | `supportpilot` |
+| Builder | Native Node.js |
+| Build Command | `npm install && cd frontend && npm install && cd .. && npm run build:all` |
+| Run Command | `npm run start:prod` |
+| Port | `3000` |
+
+7. Add environment variables from `.env.example` in **Variables**
+8. Click **Deploy**
+
+Your app will be live at:
+
+```
+https://supportpilot-xxx.koyeb.app
+```
+
+Swagger docs:
+
+```
+https://supportpilot-xxx.koyeb.app/api/docs
+```
+
+> The `koyeb.yaml` file in this repo can also be used for one-click deployment configuration.
+
+---
+
+## 11. Deployment with Docker
 
 ### Build the image
 
@@ -527,7 +577,7 @@ Open http://localhost:3000
 
 ---
 
-## 11. Troubleshooting
+## 12. Troubleshooting
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
@@ -543,7 +593,7 @@ Open http://localhost:3000
 
 ---
 
-## 12. Demo Recording Checklist
+## 13. Demo Recording Checklist
 
 Your demo video should clearly show:
 
@@ -559,7 +609,7 @@ Your demo video should clearly show:
 
 ---
 
-## 13. LinkedIn Post Template
+## 14. LinkedIn Post Template
 
 You can use this as a starting point for your LinkedIn post:
 
@@ -591,7 +641,7 @@ What I learned:
 
 ---
 
-## 14. Free Tier Limits
+## 15. Free Tier Limits
 
 | Service | Free Tier | Limit |
 |---------|-----------|-------|
@@ -600,6 +650,7 @@ What I learned:
 | Sentry | Developer plan | 5,000 errors/month |
 | Render | Web Service Free | 512 MB RAM, sleeps after inactivity |
 | Vercel | Hobby Plan | Serverless functions, 10s timeout |
+| Koyeb | Free Tier | 1 app, native Node.js, no card |
 
 ### Important note about Resend
 

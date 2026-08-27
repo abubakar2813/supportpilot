@@ -1,0 +1,30 @@
+name: supportpilot
+routes:
+  - path: /
+    port: 3000
+ports:
+  - port: 3000
+    path: /
+    protocol: http
+healthchecks:
+  - port: 3000
+    path: /health
+    interval: 60s
+    timeout: 5s
+env:
+  - name: NODE_ENV
+    value: production
+  - name: PORT
+    value: "3000"
+  - name: GEMINI_MODEL
+    value: gemini-3.6-flash
+  - name: RESEND_FROM_EMAIL
+    value: onboarding@resend.dev
+  # Add these secrets in the Koyeb dashboard:
+  # - GEMINI_API_KEY
+  # - RESEND_API_KEY
+  # - SENTRY_DSN
+  # - BUSINESS_NAME
+  # - BUSINESS_WEBSITE
+  # - SUPPORT_EMAIL
+  # - SYSTEM_PROMPT
