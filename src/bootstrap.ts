@@ -8,14 +8,19 @@ import compression from 'compression';
 import { SentryExceptionFilter } from './common/filters/sentry-exception.filter';
 
 export async function configureApp(app: INestApplication): Promise<INestApplication> {
+  const isVercel = !!process.env.VERCEL;
+  if (isVercel) console.log('[Vercel] configureApp start');
+
   const configService = app.get(ConfigService);
 
   // Security & performance middleware
+  if (isVercel) console.log('[Vercel] Applying helmet...');
   app.use(helmet());
   // Compression can hang in serverless environments (e.g. Vercel), so skip it there.
-  if (!process.env.VERCEL) {
+  if (!isVercel) {
     app.use(compression());
   }
+  if (isVercel) console.log('[Vercel] CORS enabled');
   app.enableCors();
 
   // Global validation
@@ -30,6 +35,7 @@ export async function configureApp(app: INestApplication): Promise<INestApplicat
   // Sentry init
   const sentryDsn = configService.get<string>('SENTRY_DSN');
   if (sentryDsn) {
+    if (isVercel) console.log('[Vercel] Initializing Sentry...');
     Sentry.init({
       dsn: sentryDsn,
       environment: configService.get<string>('NODE_ENV', 'development'),
@@ -37,9 +43,11 @@ export async function configureApp(app: INestApplication): Promise<INestApplicat
     });
     const { httpAdapter } = app.get(HttpAdapterHost);
     app.useGlobalFilters(new SentryExceptionFilter(httpAdapter));
+    if (isVercel) console.log('[Vercel] Sentry initialized');
   }
 
   // Swagger docs
+  if (isVercel) console.log('[Vercel] Setting up Swagger...');
   const swaggerConfig = new DocumentBuilder()
     .setTitle('SupportPilot API')
     .setDescription(
@@ -54,6 +62,7 @@ export async function configureApp(app: INestApplication): Promise<INestApplicat
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);
+  if (isVercel) console.log('[Vercel] Swagger setup complete');
 
   return app;
 }
