@@ -69,7 +69,8 @@
         "SENTRY_DSN"
       ],
       "configFile": "vercel.json",
-      "entryPoint": "api/index.ts"
+      "entryPoint": "api/index.ts",
+      "notes": "Vercel auto-detects api/index.ts as a serverless function. Set Output Directory to frontend/dist in the dashboard."
     },
     "koyeb": {
       "serviceName": "supportpilot",

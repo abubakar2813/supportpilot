@@ -1,21 +1,3 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build:vercel",
-  "framework": null,
-  "builds": [
-    {
-      "src": "api/index.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/index.ts"
-    },
-    {
-      "src": "/(health|settings|chat|email)(.*)",
-      "dest": "/api/index.ts"
-    }
-  ]
+  "buildCommand": "npm run build:vercel"
 }
